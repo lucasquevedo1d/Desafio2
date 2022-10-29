@@ -5,7 +5,7 @@ import { InputLabel, MenuItem,  Select } from '@material-ui/core'
 import axios from "axios"
 import { URL_COUTRY, URL_CTY } from './apis'
 import UseForm from './hooks/useForm'
-import Alert from './Alert'
+
 const CadastroForm = () => {
     const [form, onChange, clear] = UseForm({nome:"", email:"", telefone:"", cpf:"", country:"", city:null})
     const [country, setCountry] = useState([])
@@ -52,12 +52,7 @@ const CadastroForm = () => {
         alert("Aplicação realizada com sucesso!")
         clear()
 }
-console.log(form)
-console.log(form.country)
-// const filter = city.filter((p) =>{
-//     return p.country_code == form.country
-// })
-// console.log(filter)
+
     useEffect(() => {
         countryChoice()
         cityChoice()
