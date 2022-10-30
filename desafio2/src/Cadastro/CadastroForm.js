@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { ButtonHome, FontButton, Form, PositionButton } from './styled'
+import { Alert, ButtonHome, FontButton, Form, PositionButton } from './styled'
 import TextField from "@material-ui/core/TextField"
 import { InputLabel, MenuItem,  Select } from '@material-ui/core'
 import axios from "axios"
-import { URL_COUTRY, URL_CTY } from './apis'
-import UseForm from './hooks/useForm'
+import { URL_COUTRY, URL_CTY } from '../URL/Url'
+import UseForm  from '../hooks/useForm'
+import Swal from 'sweetalert2'
 
 const CadastroForm = () => {
     const [form, onChange, clear] = UseForm({nome:"", email:"", telefone:"", cpf:"", country:"", city:null})
@@ -16,6 +17,7 @@ const CadastroForm = () => {
             .then((res) => {
                 setCountry(res.data)
                 clear()
+                
             })
 
             .catch((err) => {
@@ -49,7 +51,22 @@ const CadastroForm = () => {
 
     const onSubmitForm = (event) => {
         event.preventDefault()    
-        alert("Aplicação realizada com sucesso!")
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+          
+          Toast.fire({
+            icon: 'success',
+            title: 'Aplicação realizada com sucesso!'
+          })
         clear()
 }
 
@@ -126,15 +143,15 @@ const CadastroForm = () => {
                             onChange={onChange}
                             required
 
-                            >{city.map((p) => {
+                            >{city && city.map((p) => {
                                 if(p.country_code === form.country){
                                     return <MenuItem  value={p.id} >{p.name_ptbr}</MenuItem>
-                                }   
+                                }
                                 })}
                         </Select>
                         <br />
                         <PositionButton>
-                            <ButtonHome variant='contained' color='inherit' type='submit'><FontButton>Enviar</FontButton></ButtonHome>
+                            <ButtonHome variant='contained' color='primary' type='submit'><FontButton>Enviar</FontButton></ButtonHome>
                         </PositionButton>
                     </Form>
   )
